@@ -15,7 +15,7 @@ npm i docsify-cli -g
 然后将本项目clone到本地:
 
 ``` shell
-git clone https://github.com/tanzby/vo.git
+git clone https://github.com/tanzby/visual_odometry.git
 cd vo
 ```
 

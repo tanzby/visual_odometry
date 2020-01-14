@@ -34,6 +34,8 @@ $$
 
 ## $\mathbf{SO}(3)$ 上的李代数
 
+***指数映射***
+
 对于$\mathbf{SO}(3)$，其指数映射（Exponential map）表示：
 $$
 \begin{aligned} \exp : \mathfrak{s o}(3) & \mapsto \mathbf{SO}(3) \\ \boldsymbol{\omega} & \mapsto \mathbf{R}_{3 \times 3} \end{aligned}
@@ -42,9 +44,11 @@ $$
 $$
 e^{\boldsymbol{\omega}} \equiv e^{[{\boldsymbol{\omega}}]_{\times}}=\mathbf{I}_{3}+\frac{\sin \theta}{\theta}{[{\boldsymbol{\omega}}]_{\times}}+\frac{1-\cos \theta}{\theta^{2}}{[{\boldsymbol{\omega}}]_{\times}}^{2}
 $$
-该对应关系是满射的，其中，$\theta=\left\|\boldsymbol{\omega}\right\|_2$ ，$[{\boldsymbol{\omega}}]_{\times}$ 为$\boldsymbol{\omega}\in \mathbb{R}^{3}$对应的反对称矩阵.
-
-
+该对应关系是满射的，其中，$\theta=\left\|\boldsymbol{\omega}\right\|_2$ ，$[{\boldsymbol{\omega}}]_{\times}$ 为$\boldsymbol{\omega}\in \mathbb{R}^{3}$对应的反对称矩阵。当$\theta\rightarrow0$时，取
+$$
+e^{[{\boldsymbol{\omega}}]_{\times}}=\mathbf{I}_3+[{\boldsymbol{\omega}}]_{\times}+\frac{1}{2}[{\boldsymbol{\omega}}]_{\times}^2=\mathbf{I}_3
+$$
+***对数映射***
 
 对于$\mathbf{SO}(3)$，其对数映射由下式给出：
 $$
@@ -59,8 +63,15 @@ $$
 \end{aligned}
 $$
 
+当$\cos \theta \rightarrow1$时，取
+$$
+\ln (\mathbf{R}) =\frac{1}{2}\left(\mathbf{R}-\mathbf{R}^{\top}\right)=\boldsymbol 0
+$$
+
 
 ## $\mathbf{SE}(3)$ 上的李代数
+
+***指数映射***
 
 令
 $$
@@ -90,6 +101,12 @@ $$
 $$
 \mathbf{V}=\mathbf{I}_{3}+\frac{1-\cos \theta}{\theta^{2}}[\boldsymbol{\omega}]_{\times}+\frac{\theta-\sin \theta}{\theta^{3}}[\boldsymbol{\omega}]_{\times}^{2}
 $$
+当$\theta\rightarrow0$时，取
+$$
+\mathbf{V}=\mathbf{I}_{3}, \quad e^{\mathbf{A}(\mathbf{v})}= \mathbf{I}_{3}
+$$
+***对数映射***
+
 对于$\mathbf{SE}(3)$，其对数映射表示：
 $$
 \begin{aligned} \ln : \mathbf{S E}(3) & \mapsto \mathfrak{s e}(3) \\ \mathbf{A}(\mathbf{v}) & \mapsto \mathbf{v} \end{aligned}
@@ -119,5 +136,12 @@ $$
 
 \mathbf{t}^{\prime} &=\mathbf{V}^{-1} \mathbf{t}
 
+\end{aligned}
+$$
+当$\cos \theta \rightarrow1$时，取
+$$
+\begin{aligned}
+\mathbf{t}^{\prime} = \boldsymbol{0} \\
+\boldsymbol{\omega}  = \boldsymbol{0} \\
 \end{aligned}
 $$
