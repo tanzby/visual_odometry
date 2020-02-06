@@ -1,0 +1,5 @@
+num_features_init: 100
+num_features: 300
+num_feature_tracked_good: 50
+num_feature_tracked_bad: 30
+num_features_needed_for_keyframe: 80
