@@ -8,13 +8,15 @@
 #include "core/feature_manager.h"
 
 #include "utils/config.h"
-#include "viewer/viewer.h"
 
 namespace core {
 
 Frontend::Frontend() 
 {
+    num_features_tracking_good_ = Config::Get<int>("num_features_tracking_good_", 50);
+    num_features_tracking_bad_ = Config::Get<int>("num_features_tracking_bad_", 30);
     num_features_init_ = Config::Get<int>("num_features_init", 100);
+    num_features_needed_for_keyframe_ = Config::Get<int>("num_features_needed_for_keyframe", 80);
 }
 
 bool Frontend::AddFrame(Frame::Ptr frame) {
@@ -46,7 +48,7 @@ bool Frontend::Track()
     int num_track_last = FeatureManager::Get().TrackFrame(last_frame_, current_frame_);
     tracking_inliers_ = EstimateCurrentPose();
 
-    if (tracking_inliers_ > num_features_tracking_) {
+    if (tracking_inliers_ > num_features_tracking_good_) {
         // tracking good
         status_ = FrontendStatus::TRACKING_GOOD;
     } else if (tracking_inliers_ > num_features_tracking_bad_) {

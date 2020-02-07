@@ -85,8 +85,11 @@ Frame::Ptr KITTI::NextFrame()
     cv::Mat right_image = cv::imread((fmt % dataset_path_ % 1 % current_frame_index_).str(),
                        cv::IMREAD_GRAYSCALE);
 
-    CHECK(left_image.data!= nullptr)  << "cannot find left image at index "  << current_frame_index_;
-    CHECK(right_image.data!= nullptr) << "cannot find right image at index " << current_frame_index_;
+    if (left_image.data == nullptr || right_image.data == nullptr) // may be end of dataset
+    {
+        LOG(WARNING) << "cannot read images if index " << current_frame_index_;
+        return nullptr;
+    }
 
     auto new_frame = Frame::CreateFrame();
 

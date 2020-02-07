@@ -26,9 +26,9 @@ namespace core
         std::vector<cv::KeyPoint> keypoints;
         detector_->detect(frame->left_image, keypoints, mask);
         int cnt_detected = 0;
-        for (auto &kp : keypoints) {
-            frame->left_feature.push_back(
-                    Feature::Ptr(new Feature(frame, kp)));
+        for (auto &kp : keypoints)
+        {
+            frame->left_feature.emplace_back(Feature::Ptr(new Feature(frame, kp)));
             cnt_detected++;
         }
 

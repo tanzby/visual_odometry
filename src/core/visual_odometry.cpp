@@ -48,16 +48,19 @@ namespace core
         CHECK(data_loader_!= nullptr);
 
         Frame::Ptr new_frame = data_loader_->NextFrame();
+        if (!new_frame)
+        {
+            LOG(WARNING) << "return an empty frame from dataloader";
+            return false;
+        }
 
         static size_t last_timestamp = new_frame->time_stamp;
         static size_t avg_vo_cost_time = 5e7; // 0.05s
 
         // simulating time gap
-         std::this_thread::sleep_for(std::chrono::nanoseconds(new_frame->time_stamp - last_timestamp - avg_vo_cost_time));
-         last_timestamp = new_frame->time_stamp;
+        std::this_thread::sleep_for(std::chrono::nanoseconds(new_frame->time_stamp - last_timestamp - avg_vo_cost_time));
+        last_timestamp = new_frame->time_stamp;
         // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-        CHECK(new_frame!= nullptr) << "cannot retrieve an valid frame from DataLoader";
 
         auto t1 = std::chrono::steady_clock::now();
         bool success = frontend_->AddFrame(new_frame);
@@ -77,12 +80,11 @@ namespace core
             while (true)
             {
                 LOG(INFO) << "VO is running";
-                if (!Step())    break;
+                if (!Step())   break;
                 if (!run_computing_) break;
             }
-
             backend_->Stop();
-
+            run_computing_ = false;
         });
 
         viewer_->Run();

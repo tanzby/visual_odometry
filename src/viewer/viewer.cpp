@@ -44,6 +44,13 @@ void Viewer::Run()
                     .SetBounds(0.0, 1.0, 0.0, 1.0, -1024.0f / 768.0f)
                     .SetHandler(new pangolin::Handler3D(vis_camera));
 
+    // add a window to display RBG image
+    pangolin::View& rgb_display = pangolin::Display("RGB")
+            .SetBounds(0.0, 0.2, 0, 0.4)
+            .SetLock(pangolin::LockLeft, pangolin::LockBottom);
+
+    std::unique_ptr<pangolin::GlTexture> tex_frame = nullptr;
+
     const float blue[3]  = {0, 0, 1};
     const float green[3] = {0, 1, 0};
 
@@ -54,19 +61,26 @@ void Viewer::Run()
         vis_display.Activate(vis_camera);
 
         std::unique_lock<std::mutex> lock(viewer_data_mutex_);
+
+        if (map_)
+        {
+            DrawMapPoints();
+        }
+
         if (current_frame_)
         {
             DrawFrame(current_frame_, green);
             FollowCurrentFrame(vis_camera);
 
             cv::Mat img = PlotFrameImage();
-            cv::imshow("image", img);
-            cv::waitKey(1);
-        }
-
-        if (map_) 
-        {
-            DrawMapPoints();
+            if (!tex_frame)
+            {
+                tex_frame = std::make_unique<pangolin::GlTexture>(img.cols,img.rows, GL_RGB,false,0, GL_RGB, GL_UNSIGNED_BYTE);
+            }
+            tex_frame->Upload(img.data, GL_RGB, GL_UNSIGNED_BYTE);
+            rgb_display.Activate();
+            glColor3f(1.0,1.0,1.0);
+            tex_frame->RenderToViewportFlipXFlipY();
         }
 
         pangolin::FinishFrame();
@@ -87,7 +101,8 @@ cv::Mat Viewer::PlotFrameImage()
         if (mp)
         {
             Vec3 pos_cam = T * mp->GetPosition();
-            Mat hsv(1, 1, CV_8UC3, cv::Scalar(int(std::log(pos_cam.z()+1)*35)%255, 255, 255));
+            int depth = std::clamp(int(std::log(pos_cam.z()+1)*35), 0, 255);
+            Mat hsv(1, 1, CV_8UC3, cv::Scalar(depth, 255, 255));
             Mat rbg;
             cv::cvtColor(hsv, rbg, CV_HSV2BGR);
             cv::circle(img_out, feat->position.pt, 2, cv::Scalar(rbg.data[0],rbg.data[1],rbg.data[2]),2);
